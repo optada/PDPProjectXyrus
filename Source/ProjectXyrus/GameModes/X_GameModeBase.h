@@ -4,14 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "ProjectXyrusGameModeBase.generated.h"
+#include "X_GameModeBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTXYRUS_API AProjectXyrusGameModeBase : public AGameModeBase
+class PROJECTXYRUS_API AX_GameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
 };

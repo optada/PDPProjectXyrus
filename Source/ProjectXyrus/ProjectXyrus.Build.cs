@@ -10,24 +10,28 @@ public class ProjectXyrus : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
-			"GameplayAbilities", 
-			"GameplayTags", 
-			"GameplayTasks", 
 			"Core", 
+			"CoreOnline",
 			"CoreUObject", 
 			"Engine", 
 			"InputCore",
+			"Networking",
+			"GameplayAbilities", 
+			"GameplayTags", 
+			"GameplayTasks", 
 			"OnlineSubsystem",
-			"OnlineSubsystemUtils"
+			"OnlineSubsystemUtils",
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		PrivateDependencyModuleNames.AddRange(new string[]
+		{
+			"NetCore",
+			"OnlineSubsystem",
+			"OnlineSubsystemUtils",
+		});
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-		
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
 
 		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
 	}

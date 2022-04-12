@@ -23,8 +23,9 @@ public:
 	virtual void BeginPlay() override;
 	virtual void BeginDestroy() override;
 
-	bool CreateHexagons(int ClusterCellSideSize, TSubclassOf<UX_HexagonBaseComponent> HexagonClass);
+	bool CreateHexagons(const int32 CountOfHexagons, TSubclassOf<UX_HexagonBaseComponent> HexagonClass);
 
+	int32 GetCountOfHexagons() const;
 	UX_HexagonBaseComponent* GetHexagonByIndex(const int32 HexIndex);
 	
 protected:

@@ -146,7 +146,13 @@ bool AX_HexClusterBase::GenerateCells()
 bool AX_HexClusterBase::GenerateHexagonsInCell(AX_HexClusterCellBase* ClusterCell, const FVector& ClusterLocation,
 	const FVector2d& HexParameters, const bool& HexagonStartFromTop)
 {
-	if (IsValid(ClusterCell) && ClusterCell->CreateHexagons(ClusterSettings.HexagonClusterCellSize, ClusterSettings.HexagonClass) == false)
+	if (IsValid(ClusterCell) && ClusterSettings.HexagonClusterCellSize)
+	{
+		return false;
+	}
+
+	const int32 CountOfHexagonsInCell = ClusterSettings.HexagonClusterCellSize * ClusterSettings.HexagonClusterCellSize;
+	if (ClusterCell->CreateHexagons(CountOfHexagonsInCell, ClusterSettings.HexagonClass) == false)
 	{
 		return false;
 	}

@@ -31,19 +31,18 @@ void AX_HexClusterCellBase::BeginDestroy()
 	Super::BeginDestroy();
 }
 
-bool AX_HexClusterCellBase::CreateHexagons(int ClusterCellSideSize, TSubclassOf<UX_HexagonBaseComponent> HexagonClass)
+bool AX_HexClusterCellBase::CreateHexagons(const int32 CountOfHexagons, TSubclassOf<UX_HexagonBaseComponent> HexagonClass)
 {
 	ClearCell(); // Clear this cell. It can be initialized before
 	
-	if (ClusterCellSideSize <= 0 || HexagonClass->IsValidLowLevelFast() == false)
+	if (CountOfHexagons <= 0 || HexagonClass->IsValidLowLevelFast() == false)
 	{
 		return false;
 	}
 
 	// Create hexagons
-	const int32 CountOfHexagons = ClusterCellSideSize * ClusterCellSideSize; 
 	Hexagons.Reserve(CountOfHexagons); 
-	for (int HexagonIterator = 0; HexagonIterator < CountOfHexagons; HexagonIterator++)
+	for (int32 HexagonIterator = 0; HexagonIterator < CountOfHexagons; HexagonIterator++)
 	{
 		if (UX_HexagonBaseComponent* Hexagon = NewObject<UX_HexagonBaseComponent>(this, HexagonClass)) // TEXT("Hexagon")
 		{
@@ -62,6 +61,11 @@ bool AX_HexClusterCellBase::CreateHexagons(int ClusterCellSideSize, TSubclassOf<
 	}
 	
 	return true;
+}
+
+int32 AX_HexClusterCellBase::GetCountOfHexagons() const
+{
+	return Hexagons.Num();
 }
 
 UX_HexagonBaseComponent* AX_HexClusterCellBase::GetHexagonByIndex(const int32 HexIndex)

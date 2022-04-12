@@ -8,7 +8,7 @@
 
 
 USTRUCT(BlueprintType)
-struct PROJECTXYRUS_API FX_HexCoordinate
+struct PROJECTXYRUS_API FX_HexCubeCoordinate
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -28,10 +28,18 @@ class PROJECTXYRUS_API UX_HexagonBaseComponent : public UStaticMeshComponent
 
 protected:
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = Hexagon)
-	FX_HexCoordinate Coordinate;
-	
+	FX_HexCubeCoordinate Coordinate;
+
 public:
-	UX_HexagonBaseComponent();
+	void SetHexCubeCoordinate(const FX_HexCubeCoordinate& HexCoordinate);
+	void SetHexCubeCoordinate_Oddq(const int32 Col, const int32 Row);
+
+	UFUNCTION(BlueprintCallable, Category = HexMath)
+	FX_HexCubeCoordinate GetHexCubeCoordinate();
+	UFUNCTION(BlueprintCallable, Category = HexMath)
+	int32 GetCol_Oddq() const;
+	UFUNCTION(BlueprintCallable, Category = HexMath)
+	int32 GetRow_Oddq() const;
 
 private:
 	UFUNCTION()

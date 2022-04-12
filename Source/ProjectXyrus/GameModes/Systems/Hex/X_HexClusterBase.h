@@ -69,8 +69,8 @@ protected:
 
 	virtual void ClearCluster();
 	
-	//AX_HexagonBase* GetHexagon_ByHexCoordinate(FX_HexCoordinate HexCoordinate);
-	//AX_HexagonBase* GetHexagon_ByGlobalCoordinate(FVector GlobalCoordinate);
+	//UX_HexagonBaseComponent* GetHexagon_ByCubeCoordinate(FX_HexCubeCoordinate HexCoordinate);
+	//UX_HexagonBaseComponent* GetHexagon_ByGlobalCoordinate(FVector GlobalCoordinate);
 
 	// поиск соседних точек
 	// Ориентировка по векторам направления

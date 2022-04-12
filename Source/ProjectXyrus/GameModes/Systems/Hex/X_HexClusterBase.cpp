@@ -140,6 +140,8 @@ bool AX_HexClusterBase::GenerateCells()
 		}	
 	}
 
+	//TODO: setup coordinate for all hexagons
+
 	return true;
 }
 

@@ -17,7 +17,7 @@ struct PROJECTXYRUS_API FX_HexClusterSettings
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AX_HexClusterCellBase> HexagonClusterCellClass = AX_HexClusterCellBase::StaticClass();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<UX_HexagonBaseComponent> HexagonClass = UX_HexagonBaseComponent::StaticClass();
+	TSubclassOf<UX_HexBaseComponent> HexagonClass = UX_HexBaseComponent::StaticClass();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(UIMin = 0, Delta = 1))
 	int32 ClusterCells_X = 0;
@@ -57,6 +57,7 @@ protected:
 public:	
 	AX_HexClusterBase();
 
+	virtual void PostInitializeComponents() override;
 	virtual void PostEditChangeChainProperty(FPropertyChangedChainEvent& PropertyChangedEvent) override;
 	
 	virtual bool SetupCluster(const FX_HexClusterSettings& NewSettings);

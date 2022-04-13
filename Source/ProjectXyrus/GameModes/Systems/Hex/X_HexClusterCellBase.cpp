@@ -17,11 +17,11 @@ AX_HexClusterCellBase::AX_HexClusterCellBase()
 	RootComponent = CreateDefaultSubobject<USceneComponent>("Root Scene Component");
 }
 
-void AX_HexClusterCellBase::BeginPlay()
+void AX_HexClusterCellBase::PostInitializeComponents()
 {
+	Super::PostInitializeComponents();
+
 	SetReplicates(true);
-	
-	Super::BeginPlay();
 }
 
 void AX_HexClusterCellBase::BeginDestroy()
@@ -31,7 +31,7 @@ void AX_HexClusterCellBase::BeginDestroy()
 	Super::BeginDestroy();
 }
 
-bool AX_HexClusterCellBase::CreateHexagons(const int32 CountOfHexagons, TSubclassOf<UX_HexagonBaseComponent> HexagonClass)
+bool AX_HexClusterCellBase::CreateHexagons(const int32 CountOfHexagons, TSubclassOf<UX_HexBaseComponent> HexagonClass)
 {
 	ClearCell(); // Clear this cell. It can be initialized before
 	
@@ -44,7 +44,7 @@ bool AX_HexClusterCellBase::CreateHexagons(const int32 CountOfHexagons, TSubclas
 	Hexagons.Reserve(CountOfHexagons); 
 	for (int32 HexagonIterator = 0; HexagonIterator < CountOfHexagons; HexagonIterator++)
 	{
-		if (UX_HexagonBaseComponent* Hexagon = NewObject<UX_HexagonBaseComponent>(this, HexagonClass)) // TEXT("Hexagon")
+		if (UX_HexBaseComponent* Hexagon = NewObject<UX_HexBaseComponent>(this, HexagonClass))
 		{
 			if (Hexagon->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform) == false)
 			{
@@ -68,7 +68,7 @@ int32 AX_HexClusterCellBase::GetCountOfHexagons() const
 	return Hexagons.Num();
 }
 
-UX_HexagonBaseComponent* AX_HexClusterCellBase::GetHexagonByIndex(const int32 HexIndex)
+UX_HexBaseComponent* AX_HexClusterCellBase::GetHexagonByIndex(const int32 HexIndex)
 {
 	return Hexagons.IsValidIndex(HexIndex) ? Hexagons[HexIndex] : nullptr;
 }

@@ -19,10 +19,16 @@ void AX_HexClusterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 AX_HexClusterBase::AX_HexClusterBase()
 {
-	SetReplicates(true);
 	PrimaryActorTick.bCanEverTick = true;
 	
 	RootComponent = CreateDefaultSubobject<USceneComponent>("Root Scene Component");
+}
+
+void AX_HexClusterBase::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	SetReplicates(true);
 }
 
 void AX_HexClusterBase::PostEditChangeChainProperty(FPropertyChangedChainEvent& PropertyChangedEvent)
@@ -140,15 +146,13 @@ bool AX_HexClusterBase::GenerateCells()
 		}	
 	}
 
-	//TODO: setup coordinate for all hexagons
-
 	return true;
 }
 
 bool AX_HexClusterBase::GenerateHexagonsInCell(AX_HexClusterCellBase* ClusterCell, const FVector& ClusterLocation,
 	const FVector2d& HexParameters, const bool& HexagonStartFromTop)
 {
-	if (IsValid(ClusterCell) && ClusterSettings.HexagonClusterCellSize)
+	if (IsValid(ClusterCell) == false || ClusterSettings.HexagonClusterCellSize <= 0)
 	{
 		return false;
 	}
@@ -164,7 +168,7 @@ bool AX_HexClusterBase::GenerateHexagonsInCell(AX_HexClusterCellBase* ClusterCel
 		const bool HexagonShiftLower_Y = static_cast<bool>(HexIndex_X % 2) == HexagonStartFromTop; // if we start from top, not even hexagons will be lower
 		for (int32 HexIndex_Y = 0; HexIndex_Y < ClusterSettings.HexagonClusterCellSize; HexIndex_Y++)
 		{
-			if (UX_HexagonBaseComponent* Hexagon = ClusterCell->GetHexagonByIndex(HexIndex_X + HexIndex_Y * ClusterSettings.HexagonClusterCellSize))
+			if (UX_HexBaseComponent* Hexagon = ClusterCell->GetHexagonByIndex(HexIndex_X + HexIndex_Y * ClusterSettings.HexagonClusterCellSize))
 			{
 				const FVector HexagonLocation = {
 					HexIndex_X * HexParameters.X * 0.75,

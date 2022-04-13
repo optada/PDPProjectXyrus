@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "X_HexagonBaseComponent.h"
+#include "X_HexBaseComponent.h"
 
 #include "X_HexClusterCellBase.generated.h"
 
@@ -15,18 +15,18 @@ class PROJECTXYRUS_API AX_HexClusterCellBase : public AActor
 
 protected:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = HexagonClusterCell)
-	TArray<UX_HexagonBaseComponent*> Hexagons;
+	TArray<UX_HexBaseComponent*> Hexagons;
 	
 public:
 	AX_HexClusterCellBase();
 
-	virtual void BeginPlay() override;
+	virtual void PostInitializeComponents() override;
 	virtual void BeginDestroy() override;
 
-	bool CreateHexagons(const int32 CountOfHexagons, TSubclassOf<UX_HexagonBaseComponent> HexagonClass);
+	bool CreateHexagons(const int32 CountOfHexagons, TSubclassOf<UX_HexBaseComponent> HexagonClass);
 
 	int32 GetCountOfHexagons() const;
-	UX_HexagonBaseComponent* GetHexagonByIndex(const int32 HexIndex);
+	UX_HexBaseComponent* GetHexagonByIndex(const int32 HexIndex);
 	
 protected:
 	virtual void ClearCell();

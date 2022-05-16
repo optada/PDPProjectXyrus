@@ -54,6 +54,16 @@ bool AX_HexClusterBase::SetupCluster(const FX_HexClusterSettings& NewSettings)
 	return true;
 }
 
+UX_HexBaseComponent* AX_HexClusterBase::GetHexagon_ByCubeCoordinate(const FX_HexCubeCoordinate& HexCoordinate)
+{
+	return nullptr;
+}
+
+UX_HexBaseComponent* AX_HexClusterBase::GetHexagon_ByGlobalCoordinate(const FVector& GlobalCoordinate)
+{
+	return nullptr;
+}
+
 bool AX_HexClusterBase::GenerateClusterFromSettings()
 {
 	ClearCluster();
@@ -93,6 +103,10 @@ bool AX_HexClusterBase::GenerateCells()
 	{
 		for (int32 CellIndex_Y = 0; CellIndex_Y < ClusterSettings.ClusterCells_Y; CellIndex_Y++)
 		{
+			FX_HexOffsetCoordinate FirstHexagonOffsetForCell;
+			FirstHexagonOffsetForCell.Q = CellIndex_X * ClusterSettings.HexagonClusterCellSize;
+			FirstHexagonOffsetForCell.R = CellIndex_Y * ClusterSettings.HexagonClusterCellSize;
+			
 			const int32 CellID = CellIndex_X + CellIndex_Y * ClusterSettings.ClusterCells_X;
 			const bool HexagonsStartsFromTop = IsEvenCountHexagonsInCell ? !static_cast<bool>(CellIndex_X % 2) : true; // "oddq vertical layout" --> Shift lower on Y every second X Hexagon
 
@@ -138,7 +152,7 @@ bool AX_HexClusterBase::GenerateCells()
 				UE_LOG(AX_HexClusterBase_LOG, Log, TEXT(" --:-- "));
 			}
 			
-			if (GenerateHexagonsInCell(ClusterCell, CellLocation, HexParameters, HexagonsStartsFromTop) == false)
+			if (GenerateHexagonsInCell(ClusterCell, CellLocation, FirstHexagonOffsetForCell, HexParameters, HexagonsStartsFromTop) == false)
 			{
 				UE_LOG(AX_HexClusterBase_LOG, Error, TEXT("Failed create or setup hexagons in ClusterCell | ID = %d"), CellID);
 				return false;
@@ -150,49 +164,77 @@ bool AX_HexClusterBase::GenerateCells()
 }
 
 bool AX_HexClusterBase::GenerateHexagonsInCell(AX_HexClusterCellBase* ClusterCell, const FVector& ClusterLocation,
-	const FVector2d& HexParameters, const bool& HexagonStartFromTop)
+	const FX_HexOffsetCoordinate& FirstHexagonOffset, const FVector2d& HexParameters, const bool& HexagonStartFromTop)
 {
-	if (IsValid(ClusterCell) == false || ClusterSettings.HexagonClusterCellSize <= 0)
-	{
-		return false;
-	}
-
 	const int32 CountOfHexagonsInCell = ClusterSettings.HexagonClusterCellSize * ClusterSettings.HexagonClusterCellSize;
-	if (ClusterCell->CreateHexagons(CountOfHexagonsInCell, ClusterSettings.HexagonClass) == false)
+	
+	if (IsValid(ClusterCell) == false
+		|| ClusterSettings.HexagonClusterCellSize <= 0
+		|| ClusterCell->InitializeEmptyCell(CountOfHexagonsInCell) == false)
 	{
 		return false;
 	}
 	
 	for (int32 HexIndex_X = 0; HexIndex_X < ClusterSettings.HexagonClusterCellSize; HexIndex_X++)
 	{
-		const bool HexagonShiftLower_Y = static_cast<bool>(HexIndex_X % 2) == HexagonStartFromTop; // if we start from top, not even hexagons will be lower
 		for (int32 HexIndex_Y = 0; HexIndex_Y < ClusterSettings.HexagonClusterCellSize; HexIndex_Y++)
 		{
-			if (UX_HexBaseComponent* Hexagon = ClusterCell->GetHexagonByIndex(HexIndex_X + HexIndex_Y * ClusterSettings.HexagonClusterCellSize))
+			FX_HexOffsetCoordinate OddqCoordinate;
+			OddqCoordinate.Q = HexIndex_X + FirstHexagonOffset.Q;
+			OddqCoordinate.R = HexIndex_Y + FirstHexagonOffset.R;
+			
+			if (ShouldGenerateHexagon(OddqCoordinate) == false)
 			{
+				if (ShowDebugLogOnGeneration)
+				{
+					UE_LOG(AX_HexClusterBase_LOG, Log, TEXT(" "));
+					UE_LOG(AX_HexClusterBase_LOG, Log, TEXT("INTIALIZE CANCELED Hexagon: | Q = %d | R = %d"), OddqCoordinate.Q, OddqCoordinate.R);
+				}
+				
+				continue;
+			}
+
+			
+			if (UX_HexBaseComponent* Hexagon = NewObject<UX_HexBaseComponent>(ClusterCell, ClusterSettings.HexagonClass))
+			{
+				const bool HexagonShiftLower_Y = static_cast<bool>(HexIndex_X % 2) == HexagonStartFromTop; // if we start from top, not even hexagons will be lower
+				const int32 HexagonIndex = HexIndex_X + HexIndex_Y * ClusterSettings.HexagonClusterCellSize;
 				const FVector HexagonLocation = {
 					HexIndex_X * HexParameters.X * 0.75,
 					HexIndex_Y * HexParameters.Y + (HexagonShiftLower_Y ? HexParameters.Y / 2 : 0),
 					ClusterLocation.Z
 				};
 				
+				if (Hexagon->AttachToComponent(ClusterCell->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform) == false
+					|| ClusterCell->SetHexagonByIndex(HexagonIndex, Hexagon) == false)
+				{
+					return false;	
+				}
+
+				Hexagon->SetCoordinate(OddqCoordinate);
 				Hexagon->SetRelativeLocation(HexagonLocation);
+				Hexagon->RegisterComponent();
 
 				if (ShowDebugLogOnGeneration)
 				{
 					UE_LOG(AX_HexClusterBase_LOG, Log, TEXT(" "));
-					UE_LOG(AX_HexClusterBase_LOG, Log, TEXT("INITIALIZED Hexagon: | X = %d | Y = %d"), HexIndex_X, HexIndex_Y);
+					UE_LOG(AX_HexClusterBase_LOG, Log, TEXT("INITIALIZED Hexagon: | Q = %d | R = %d"), OddqCoordinate.Q, OddqCoordinate.R);
 					UE_LOG(AX_HexClusterBase_LOG, Log, TEXT("HexagonShiftLower_Y: | %s"), (HexagonShiftLower_Y ? TEXT("true") : TEXT("false")));
 					UE_LOG(AX_HexClusterBase_LOG, Log, TEXT("HexagonLocation: | %s"), *HexagonLocation.ToString());
 				}
 			}
 			else
-			{
-				return false;	
+			{	
+				return false;
 			}
 		}
 	}
 
+	return true;
+}
+
+bool AX_HexClusterBase::ShouldGenerateHexagon(FX_HexOffsetCoordinate& HexOffsetCoordinate)
+{
 	return true;
 }
 

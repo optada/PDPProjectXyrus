@@ -31,36 +31,35 @@ void AX_HexClusterCellBase::BeginDestroy()
 	Super::BeginDestroy();
 }
 
-bool AX_HexClusterCellBase::CreateHexagons(const int32 CountOfHexagons, TSubclassOf<UX_HexBaseComponent> HexagonClass)
+bool AX_HexClusterCellBase::InitializeEmptyCell(const int32 CountOfHexagons) 
 {
 	ClearCell(); // Clear this cell. It can be initialized before
 	
-	if (CountOfHexagons <= 0 || HexagonClass->IsValidLowLevelFast() == false)
+	if (CountOfHexagons <= 0)
 	{
 		return false;
 	}
 
-	// Create hexagons
+	// Create empty hexagons
 	Hexagons.Reserve(CountOfHexagons); 
 	for (int32 HexagonIterator = 0; HexagonIterator < CountOfHexagons; HexagonIterator++)
 	{
-		if (UX_HexBaseComponent* Hexagon = NewObject<UX_HexBaseComponent>(this, HexagonClass))
-		{
-			if (Hexagon->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform) == false)
-			{
-				return false;	
-			}
-			
-			Hexagon->RegisterComponent();
-			Hexagons.Add(Hexagon);
-		}
-		else
-		{
-			return false;
-		}
+		Hexagons.Add(nullptr);
 	}
 	
 	return true;
+}
+
+bool AX_HexClusterCellBase::SetHexagonByIndex(const int32 HexIndex, UX_HexBaseComponent* Hexagon)
+{
+	if (Hexagons.IsValidIndex(HexIndex) || IsValid(Hexagon))
+	{
+		Hexagons[HexIndex] = Hexagon;
+		
+		return true;
+	}
+
+	return false;
 }
 
 int32 AX_HexClusterCellBase::GetCountOfHexagons() const

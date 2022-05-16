@@ -62,17 +62,17 @@ public:
 	
 	virtual bool SetupCluster(const FX_HexClusterSettings& NewSettings);
 
+		
+	UX_HexBaseComponent* GetHexagon_ByCubeCoordinate(const FX_HexCubeCoordinate& HexCoordinate);
+	UX_HexBaseComponent* GetHexagon_ByGlobalCoordinate(const FVector& GlobalCoordinate);
+
 protected:
 	virtual bool GenerateClusterFromSettings();
 	virtual bool GenerateCells();
 	virtual bool GenerateHexagonsInCell(AX_HexClusterCellBase* ClusterCell, const FVector& ClusterLocation,
-		const FVector2d& HexParameters, const bool& HexagonStartFromTop);
+		const FX_HexOffsetCoordinate& FirstHexagonOffset, const FVector2d& HexParameters, const bool& HexagonStartFromTop);
+
+	virtual bool ShouldGenerateHexagon(FX_HexOffsetCoordinate& HexOffsetCoordinate);
 
 	virtual void ClearCluster();
-	
-	//UX_HexagonBaseComponent* GetHexagon_ByCubeCoordinate(FX_HexCubeCoordinate HexCoordinate);
-	//UX_HexagonBaseComponent* GetHexagon_ByGlobalCoordinate(FVector GlobalCoordinate);
-
-	// поиск соседних точек
-	// Ориентировка по векторам направления
 };

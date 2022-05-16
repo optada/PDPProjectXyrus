@@ -39,7 +39,6 @@ class PROJECTXYRUS_API UX_HexSupportLib : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 	
 public:
-	
 	UFUNCTION(BlueprintPure, Category = "Hex Support Library")
 	static void ConvertCoordinate_Cube_To_Oddq(const FX_HexCubeCoordinate& CubeCoordinate, FX_HexOffsetCoordinate& OddqCoordinate);
 	

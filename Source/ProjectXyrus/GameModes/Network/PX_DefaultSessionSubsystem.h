@@ -3,16 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "Interfaces/OnlineSessionInterface.h"
-#include "Subsystems/GameInstanceSubsystem.h"
 #include "PX_SessionSubsystemBase.h"
 
 #include "PX_DefaultSessionSubsystem.generated.h"
 
 
 UCLASS()
-class UPX_DefaultSessionSubsystem : public UPX_SessionSubsystemBase
+class PROJECTXYRUS_API UPX_DefaultSessionSubsystem : public UPX_SessionSubsystemBase
 {
 	GENERATED_BODY()
 

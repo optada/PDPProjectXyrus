@@ -59,8 +59,7 @@ void UPX_DefaultSessionSubsystem::UpdateSession()
 	TSharedPtr<FOnlineSessionSettings> updatedSessionSettings = MakeShareable(new FOnlineSessionSettings(*SessionSettings));
 	updatedSessionSettings->Set(SETTING_MAPNAME, FString("Updated Level Name"), EOnlineDataAdvertisementType::ViaOnlineService);
 
-	UpdateSessionCompleteDelegateHandle =
-		sessionInterface->AddOnUpdateSessionCompleteDelegate_Handle(UpdateSessionCompleteDelegate);
+	UpdateSessionCompleteDelegateHandle = sessionInterface->AddOnUpdateSessionCompleteDelegate_Handle(UpdateSessionCompleteDelegate);
 
 	if (!sessionInterface->UpdateSession(NAME_GameSession, *updatedSessionSettings))
 	{
@@ -125,8 +124,7 @@ void UPX_DefaultSessionSubsystem::EndSession()
 		return;
 	}
 
-	EndSessionCompleteDelegateHandle =
-		sessionInterface->AddOnEndSessionCompleteDelegate_Handle(EndSessionCompleteDelegate);
+	EndSessionCompleteDelegateHandle = sessionInterface->AddOnEndSessionCompleteDelegate_Handle(EndSessionCompleteDelegate);
 
 	if (!sessionInterface->EndSession(NAME_GameSession))
 	{
@@ -156,8 +154,7 @@ void UPX_DefaultSessionSubsystem::DestroySession()
 		return;
 	}
 
-	DestroySessionCompleteDelegateHandle =
-		sessionInterface->AddOnDestroySessionCompleteDelegate_Handle(DestroySessionCompleteDelegate);
+	DestroySessionCompleteDelegateHandle = sessionInterface->AddOnDestroySessionCompleteDelegate_Handle(DestroySessionCompleteDelegate);
 
 	if (!sessionInterface->DestroySession(NAME_GameSession))
 	{
@@ -187,8 +184,7 @@ void UPX_DefaultSessionSubsystem::FindSessions(int32 MaxSearchResults, bool IsLA
 		return;
 	}
 
-	FindSessionsCompleteDelegateHandle =
-		sessionInterface->AddOnFindSessionsCompleteDelegate_Handle(FindSessionsCompleteDelegate);
+	FindSessionsCompleteDelegateHandle = sessionInterface->AddOnFindSessionsCompleteDelegate_Handle(FindSessionsCompleteDelegate);
 
 	SessionSearchResult = MakeShareable(new FOnlineSessionSearch());
 	SessionSearchResult->MaxSearchResults = MaxSearchResults;

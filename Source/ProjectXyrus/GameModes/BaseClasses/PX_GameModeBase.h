@@ -7,9 +7,7 @@
 
 #include "PX_GameModeBase.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class PROJECTXYRUS_API APX_GameModeBase : public AGameModeBase
 {

@@ -6,9 +6,7 @@
 #include "GameFramework/PlayerState.h"
 #include "PX_PlayerStateBase.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class PROJECTXYRUS_API APX_PlayerStateBase : public APlayerState
 {

@@ -8,9 +8,6 @@
 #include "PX_GameStateBase.generated.h"
 
 
-/**
- * 
- */
 UCLASS()
 class PROJECTXYRUS_API APX_GameStateBase : public AGameStateBase
 {

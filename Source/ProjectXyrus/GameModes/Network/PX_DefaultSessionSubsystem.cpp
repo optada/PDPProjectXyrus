@@ -5,8 +5,8 @@
 #include "OnlineSubsystemUtils.h"
 
 
-DECLARE_LOG_CATEGORY_EXTERN(UX_DefaultSessionSubsystem_LOG, Log, All);
-DEFINE_LOG_CATEGORY(UX_DefaultSessionSubsystem_LOG);
+DECLARE_LOG_CATEGORY_EXTERN(UPX_DefaultSessionSubsystem_LOG, Log, All);
+DEFINE_LOG_CATEGORY(UPX_DefaultSessionSubsystem_LOG);
 
 
 UPX_DefaultSessionSubsystem::UPX_DefaultSessionSubsystem()

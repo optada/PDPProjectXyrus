@@ -25,6 +25,7 @@ public class ProjectXyrus : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
+			"DeveloperSettings",
 			"NetCore",
 			"OnlineSubsystem",
 			"OnlineSubsystemUtils",

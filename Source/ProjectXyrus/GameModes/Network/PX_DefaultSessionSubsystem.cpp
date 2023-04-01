@@ -11,7 +11,7 @@ DEFINE_LOG_CATEGORY(UPX_DefaultSessionSubsystem_LOG);
 
 UPX_DefaultSessionSubsystem::UPX_DefaultSessionSubsystem()
 {
-	//UE_LOG(UX_DefaultSessionSubsystem_LOG, Log, TEXT("Using default session subsytem: %s"), *GetName());
+	UE_LOG(UPX_DefaultSessionSubsystem_LOG, Log, TEXT("Using default session subsytem: %s"), *GetName());
 }
 
 void UPX_DefaultSessionSubsystem::CreateSession(FOnlineSessionSettings& NewSessionSettings)
@@ -27,8 +27,11 @@ void UPX_DefaultSessionSubsystem::CreateSession(FOnlineSessionSettings& NewSessi
 
 	CreateSessionCompleteDelegateHandle = SessionInterface->AddOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegate);
 
+	// If we have LocalPlayer - we will use it for create a Session, otherwise - we will use HostingPlayerNum = 0 (server case)
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
-	if (!SessionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, *SessionSettings))
+	if (LocalPlayer
+		? SessionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, *SessionSettings)
+		: SessionInterface->CreateSession(0, NAME_GameSession, *SessionSettings))
 	{
 		SessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegateHandle);
 
@@ -239,17 +242,6 @@ void UPX_DefaultSessionSubsystem::JoinGameSession(const FOnlineSessionSearchResu
 	}
 }
 
-void UPX_DefaultSessionSubsystem::OnJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
-{
-	const IOnlineSessionPtr sessionInterface = Online::GetSessionInterface(GetWorld());
-	if (sessionInterface)
-	{
-		sessionInterface->ClearOnJoinSessionCompleteDelegate_Handle(JoinSessionCompleteDelegateHandle);
-	}
-
-	OnJoinGameSessionCompleteEvent.Broadcast(Result);
-}
-
 bool UPX_DefaultSessionSubsystem::TryTravelToCurrentSession()
 {
 	const IOnlineSessionPtr sessionInterface = Online::GetSessionInterface(GetWorld());
@@ -267,4 +259,15 @@ bool UPX_DefaultSessionSubsystem::TryTravelToCurrentSession()
 	APlayerController* playerController = GetWorld()->GetFirstPlayerController();
 	playerController->ClientTravel(connectString, TRAVEL_Absolute);
 	return true;
+}
+
+void UPX_DefaultSessionSubsystem::OnJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+{
+	const IOnlineSessionPtr sessionInterface = Online::GetSessionInterface(GetWorld());
+	if (sessionInterface)
+	{
+		sessionInterface->ClearOnJoinSessionCompleteDelegate_Handle(JoinSessionCompleteDelegateHandle);
+	}
+
+	OnJoinGameSessionCompleteEvent.Broadcast(Result);
 }

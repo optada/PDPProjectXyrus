@@ -6,9 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "PX_GameInstanceXyrusBase.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class PROJECTXYRUS_API UPX_GameInstanceXyrusBase : public UGameInstance
 {

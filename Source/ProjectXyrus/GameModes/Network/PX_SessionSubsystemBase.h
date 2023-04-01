@@ -60,6 +60,8 @@ public:
 	
 	virtual void FindSessions(int32 MaxSearchResults, bool IsLANQuery) {}
 	virtual void JoinGameSession(const FOnlineSessionSearchResult& SessionResult) {}
+	
+	virtual bool TryTravelToCurrentSession() { return false; }
 
 protected:
 	virtual void OnCreateSessionCompleted(FName SessionName, bool Successful) {}
@@ -71,6 +73,4 @@ protected:
 	
 	virtual void OnFindSessionsCompleted(bool Successful) {}
 	virtual void OnJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result) {}
-	
-	virtual bool TryTravelToCurrentSession() { return false; }
 };

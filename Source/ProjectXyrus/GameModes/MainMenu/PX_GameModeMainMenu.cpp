@@ -4,6 +4,7 @@
 
 #include "OnlineSessionSettings.h"
 #include "ProjectXyrus/GameModes/Network/PX_DefaultSessionSubsystem.h"
+#include "ProjectXyrus/Systems/StateMachine/PX_StateMachineSubsystem.h"
 
 
 DECLARE_LOG_CATEGORY_EXTERN(APX_GameModeMainMenu_LOG, Log, All);
@@ -18,6 +19,30 @@ void APX_GameModeMainMenu::InitGame(const FString& MapName, const FString& Optio
 void APX_GameModeMainMenu::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void APX_GameModeMainMenu::DebugStateMachine()
+{
+	UGameInstance* GameInstance = GetGameInstance();
+	UPX_StateMachineSubsystem* MySubsystem = GameInstance->GetSubsystem<UPX_StateMachineSubsystem>();
+		
+	MySubsystem->ChangeStateMachinePreset("MainMenu");
+	MySubsystem->PrintDebugLog();
+	
+	MySubsystem->ActivateState("Test1");
+	MySubsystem->FreezeState("Test2");
+	MySubsystem->PrintDebugLog();
+
+	MySubsystem->ActivateState("Test1");
+	MySubsystem->ActivateState("Test2");
+	MySubsystem->FreezeState("Test2");
+	MySubsystem->PrintDebugLog();
+
+	MySubsystem->ActivateState("Test2");
+	MySubsystem->PrintDebugLog();
+	
+	MySubsystem->DeactivateState("Test1");
+	MySubsystem->PrintDebugLog();
 }
 
 void APX_GameModeMainMenu::FindServers()

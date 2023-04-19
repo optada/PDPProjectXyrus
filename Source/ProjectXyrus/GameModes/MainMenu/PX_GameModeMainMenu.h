@@ -21,6 +21,9 @@ public:
 protected:
 	void ServersFounded(const TArray<FOnlineSessionSearchResult>& SessionResults, bool Successful);
 	void JoinSessionComplete(const EOnJoinSessionCompleteResult::Type JoinResult);
+
+	UFUNCTION(BlueprintCallable)
+	void DebugStateMachine();
 	
 	UFUNCTION(BlueprintCallable)
 	void FindServers();

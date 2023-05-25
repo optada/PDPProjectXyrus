@@ -9,6 +9,28 @@ DECLARE_LOG_CATEGORY_EXTERN(UPX_ServiceManager_LOG, Log, All);
 DEFINE_LOG_CATEGORY(UPX_ServiceManager_LOG);
 
 
+void UPX_ServiceManager::PrintDebugLog() const
+{
+	UE_LOG(UPX_ServiceManager_LOG, Error, TEXT("---- ---- ---- ---- SERVICE MANAGER, DEBUG LOG ---- ---- ---- ----"));
+
+	if (ServiceStateList.IsEmpty() == true)
+	{
+		UE_LOG(UPX_ServiceManager_LOG, Error, TEXT("   We have no any active services"));
+	}
+	else
+	{
+		for (const auto* State : ServiceStateList)
+		{
+			if (State)
+			{
+				UE_LOG(UPX_ServiceManager_LOG, Error, TEXT("   Service ( %s ) is %s"), *State->GetStateKey(), State->IsFrozen ? *FString("frozen") : *FString("active"));
+			}
+		}
+	}
+	
+	UE_LOG(UPX_ServiceManager_LOG, Error, TEXT("----------------------------------------------------------------"));
+}
+
 void UPX_ServiceManager::ClearServiceManager()
 {
 	for (auto* ServiceState : ServiceStateList)

@@ -28,6 +28,8 @@ void UPX_StateMachineSubsystem::PrintDebugLog() const
 			}
 		}
 	}
+
+	GetServiceManager().PrintDebugLog();
 	
 	UE_LOG(UPX_StateMachineSubsystem_LOG, Error, TEXT("----------------------------------------------------------------"));
 	UE_LOG(UPX_StateMachineSubsystem_LOG, Error, TEXT(" "));
@@ -75,7 +77,7 @@ void UPX_StateMachineSubsystem::ChangeStateMachinePreset(const FString& StateMac
 	PresetData = *StateMachinePreset;
 }
 
-void UPX_StateMachineSubsystem::ActivateScenario(const uint32& ScenarioKey, const IStatePacket* Data) const
+void UPX_StateMachineSubsystem::ActivateScenario(const uint32& ScenarioKey, const IStatePacket* Data)
 {
 	if (IsValid(ScenarioList) == false)
 	{
@@ -115,7 +117,7 @@ void UPX_StateMachineSubsystem::FreezeState(const FString& StateKey)
 	}
 }
 
-const UPX_ServiceManager& UPX_StateMachineSubsystem::GetServiceManager() const
+UPX_ServiceManager& UPX_StateMachineSubsystem::GetServiceManager() const
 {
 	checkf(ServiceManager != nullptr, TEXT("UPX_StateMachineSubsystem::GetServiceManager | Crytical Error. ServiceManager in StateMachine should be initialized"));
 	return *ServiceManager;

@@ -69,7 +69,7 @@ public:
 	void ChangeStateMachinePreset(const FString& StateMachinePresetKey);
 	
 	// Will call a scenario if it exist
-	void ActivateScenario(const uint32& ScenarioKey, const IStatePacket* Data = nullptr) const;
+	void ActivateScenario(const uint32& ScenarioKey, const IStatePacket* Data = nullptr);
 	
 	// Will create or unfreeze State if it was frozen
 	void ActivateState(const FString& StateKey);
@@ -81,7 +81,7 @@ public:
 	void FreezeState(const FString& StateKey);
 
 	
-	const UPX_ServiceManager& GetServiceManager() const;
+	UPX_ServiceManager& GetServiceManager() const;
 
 private:
 	// Will empty data before update preset 

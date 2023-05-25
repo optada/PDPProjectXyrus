@@ -28,6 +28,7 @@ void APX_GameModeMainMenu::DebugStateMachine()
 		
 	MySubsystem->ChangeStateMachinePreset("MainMenu");
 	MySubsystem->PrintDebugLog();
+	MySubsystem->GetServiceManager().ActivateService("Service1");
 	
 	MySubsystem->ActivateState("Test1");
 	MySubsystem->FreezeState("Test2");
@@ -36,12 +37,17 @@ void APX_GameModeMainMenu::DebugStateMachine()
 	MySubsystem->ActivateState("Test1");
 	MySubsystem->ActivateState("Test2");
 	MySubsystem->FreezeState("Test2");
+	MySubsystem->GetServiceManager().ActivateService("Service1");
+	MySubsystem->GetServiceManager().ActivateService("Service2");
 	MySubsystem->PrintDebugLog();
 
 	MySubsystem->ActivateState("Test2");
+	MySubsystem->GetServiceManager().DeactivateService("Service1");
+	MySubsystem->GetServiceManager().FreezeService("Service2");
 	MySubsystem->PrintDebugLog();
 	
 	MySubsystem->DeactivateState("Test1");
+	MySubsystem->GetServiceManager().ClearServiceManager();
 	MySubsystem->PrintDebugLog();
 }
 

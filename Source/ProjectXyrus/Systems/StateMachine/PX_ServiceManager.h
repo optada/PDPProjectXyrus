@@ -13,6 +13,9 @@ class PROJECTXYRUS_API UPX_ServiceManager : public UObject
 {
 	GENERATED_BODY()
 
+public:
+	void PrintDebugLog() const; // Will fire debug information
+	
 private:
 	UPROPERTY()
 	TArray<UPX_StateBase*> ServiceStateList;

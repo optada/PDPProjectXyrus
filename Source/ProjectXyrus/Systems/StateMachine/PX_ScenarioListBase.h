@@ -14,7 +14,7 @@ class PROJECTXYRUS_API UPX_StateMachineScenarioBase : public UObject
 	GENERATED_BODY()
 	
 public:
-	virtual void RunScenario(const UPX_StateMachineSubsystem& StateMachineSubsystem, const IStatePacket* Data) const {};
+	virtual void RunScenario(UPX_StateMachineSubsystem& StateMachineSubsystem, const IStatePacket* Data) const {};
 };
 
 

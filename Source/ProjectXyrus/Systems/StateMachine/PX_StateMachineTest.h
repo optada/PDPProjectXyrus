@@ -3,8 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PX_ScenarioListBase.h"
-#include "PX_StateBase.h"
+#include "PX_StateMachineSubsystem.h"
 
 #include "PX_StateMachineTest.generated.h"
 
@@ -15,9 +14,9 @@ class PROJECTXYRUS_API UPX_StateMachineScenarioTest : public UPX_StateMachineSce
 	GENERATED_BODY()
 
 public:
-	virtual void RunScenario(const UPX_StateMachineSubsystem& StateMachineSubsystem, const IStatePacket* Data) const override
+	virtual void RunScenario(UPX_StateMachineSubsystem& StateMachineSubsystem, const IStatePacket* Data) const override
 	{
-		//UPX_StateMachineSubsystem* MySubsystem = GameInstance->GetSubsystem<UPX_StateMachineSubsystem>();
+		StateMachineSubsystem.ActivateState("");
 	};
 };
 
